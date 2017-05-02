@@ -18,6 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/artists', function () {
+/*Route::get('/artists', function () {
 	return "searching...";
-});
+});*/
+
+Route::get('/artists', 'ArtistController@search');
