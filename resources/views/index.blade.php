@@ -44,6 +44,7 @@
 					</div>-->
 
 					<div v-for="item in searchResults" v-on:click="get_similar(item.id, item.name)" class="column column-block artist-thumb">
+						<div class="row">
 						<div class="small-3 column">
 							<img :src="item.images[0].url" class="thumbnail" alt=""><br>
 						</div>
@@ -52,8 +53,11 @@
 							<p><span>Artist:</span> {[item.name]}<br>
 							<span>Popularity:</span> {[item.popularity]}</p>
 						</div>
+						</div>
 
+						<div class="row">
 						<div class="similar-artists" :data-similar-to="item.id"></div>
+						</div>
 					</div>
 
 				</div>
@@ -85,7 +89,7 @@
 								table_rows.push("<tr><td>"+data.artists.items[i].name+"</td></tr>");
 							}
 
-							var html = "<h4>Similar Artists</h4><table>"+table_rows.join('');+"</table>";
+							var html = "<h5>Similar Artists</h5><table>"+table_rows.join('');+"</table>";
 							console.log(html);
 							$('.similar-artists[data-similar-to="'+id+'"]').html(html);
 
