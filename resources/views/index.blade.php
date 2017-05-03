@@ -35,28 +35,20 @@
 
 					<h3>{[resultsHeadline]}</h3>
 
-					<!--<div class="row small-up-2 medium-up-3 large-up-3">
-					  <div v-for="item in searchResults" v-on:click="get_similar(item.id, item.name)" class="column column-block artist-thumb">
-						<img :src="item.images[0].url" class="thumbnail" alt=""><br>
-						<p><span>Artist:</span> {[item.name]}<br>
-						<span>Popularity:</span> {[item.popularity]}</p>
-					  </div>
-					</div>-->
-
 					<div v-for="item in searchResults" v-on:click="get_similar(item.id, item.name)" class="column column-block artist-thumb">
 						<div class="row">
-						<div class="small-3 column">
-							<img :src="item.images[0].url" class="thumbnail" alt=""><br>
-						</div>
+							<div class="small-3 column">
+								<img :src="item.images[0].url" class="thumbnail" alt=""><br>
+							</div>
 
-						<div class="small-9 column">
-							<p><span>Artist:</span> {[item.name]}<br>
-							<span>Popularity:</span> {[item.popularity]}</p>
-						</div>
+							<div class="small-9 column">
+								<p><span>Artist:</span> {[item.name]}<br>
+								<span>Popularity:</span> {[item.popularity]}</p>
+							</div>
 						</div>
 
 						<div class="row">
-						<div class="similar-artists" :data-similar-to="item.id"></div>
+							<div class="similar-artists" :data-similar-to="item.id"></div>
 						</div>
 					</div>
 
@@ -66,6 +58,24 @@
 
 
 		<script>
+			var fill_similar_artists = function(selector, data){
+				var table_rows = [];
+
+				for(var i=0; i < data.artists.items.length; i++){
+					if(data.artists.items[i].images.length == 0){
+						data.artists.items[i].images = [{url: "//placehold.it/600x600"}];
+					}
+					table_rows.push("<tr><td>"+data.artists.items[i].name+"</td></tr>");
+				}
+
+				var html = "<h5>Similar Artists</h5><table>"+table_rows.join('');+"</table>";
+
+				html = (data.artists.items.length == 0) ? html + "0 results." : html;
+
+				$(selector).html(html);
+			};
+
+
 			var app = new Vue({
 				el: '#app',
 				data: {
@@ -78,21 +88,7 @@
 						var that = this;
 
 						$.get("/api/similar_to?spotify_id="+id, function(data){
-							//that.searchResults = data.artists.items;
-							
-							var table_rows = [];
-
-							for(var i=0; i < data.artists.items.length; i++){
-								if(data.artists.items[i].images.length == 0){
-									data.artists.items[i].images = [{url: "//placehold.it/600x600"}];
-								}
-								table_rows.push("<tr><td>"+data.artists.items[i].name+"</td></tr>");
-							}
-
-							var html = "<h5>Similar Artists</h5><table>"+table_rows.join('');+"</table>";
-							console.log(html);
-							$('.similar-artists[data-similar-to="'+id+'"]').html(html);
-
+							fill_similar_artists('.similar-artists[data-similar-to="'+id+'"]', data);
 						});
 					},
 					search: function(event){
