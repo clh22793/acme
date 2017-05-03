@@ -23,12 +23,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/similar_to', function(Request $request, SpotifyController $artist, SpotifyDaoController $dao){
-	$id = $request->input('spotify_id');
-
 	// get genres of this artist (id)
+	$id = $request->input('spotify_id');
 	$results = $dao->get_genres_by_spotify_id($id);	
 
-	// search spotify with the genre filter
+	// search spotify by genre
 	$response = json_decode($artist->search_by_genres($results), true);
 
 	// store results in db

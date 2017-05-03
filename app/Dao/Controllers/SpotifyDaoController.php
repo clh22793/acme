@@ -65,15 +65,12 @@ class SpotifyDaoController extends Controller
 	public function save_search_results($response)
 	{
 		foreach($response['artists']['items'] as $item){
-
 			$artist = $this->save_artist($item);
 
 			// insert genres
 			foreach($item['genres'] as $value){
 				$genre = $this->save_genre($value);			
-
 				$this->save_artists_genres($artist->id, $genre->id);
-
 			}
 		}
 
@@ -90,7 +87,6 @@ class SpotifyDaoController extends Controller
 		}	
 
 		return $results;
-
 	}
 
 }
