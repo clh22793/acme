@@ -27,9 +27,33 @@ function insert($table, $query, $params){
 }
 
 //Route::get('/artists', 'ArtistController@search');
+
+
+Route::get('/similar_to', function(Request $request, ArtistController $artist){
+	$id = $request->input('spotify_id');
+
+	// get genres of this artist (id)
+	$genres = DB::select('select g.name from artists a join artists_genres ag on a.id = ag.artist_id join genres g on ag.genre_id = g.id where a.spotify_id = ? limit 0,?', [$id, 2]);
+
+	$result = array();
+	foreach($genres as $genre){
+		//$result[] = '"'.$genre->name.'"';
+		$result[] = $genre->name;
+	}
+
+	print_r($result);
+
+	// search spotify with the genre filter
+
+	$artists = $artist->search_by_genres($result);
+
+	print_r($artists);
+
+});
+
 Route::get('/artists', function(Request $request, ArtistController $artist){
 	$query = $request->input('q');
-	$response = json_decode($artist->do_search($query), true);
+	$response = json_decode($artist->search_by_artist($query), true);
 
 	// store results in db
 	//print_r($response['artists']['items']);

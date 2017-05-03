@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use App\Providers\SpotifyServiceProvider;
 
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
@@ -11,27 +10,25 @@ use GuzzleHttp\Client;
 
 class ArtistController extends Controller
 {
-	public function __construct(/*SpotifyServiceProvider $spotify*/){
-		//print "do something";
-	}
 
-	// DEPRECATED
-	public function search(Request $request/*, SpotifyServiceProvider $spotify*/)
+	const BASE_URL = "https://api.spotify.com/v1/";
+
+	public function search_by_artist($query)
 	{
-		$query = $request->input('q');
+		$client = new Client();
+		$response = $client->get(self::BASE_URL.'search', ['query' => ['q' => $query, 'type' => 'artist']]);
 
-		// do search
-		//$this->do_search($query);
-		//return "searching for: ".$query;
-		//$spotify->search_by_artist($query);
+		$body = $response->getBody();
+		return $body->getContents();
 	}
 
-	public function do_search($query)
+	public function search_by_genres(array $genres)
 	{
 		$client = new Client();
 		$base_url = 'https://api.spotify.com/v1/search';
-		$response = $client->get($base_url, ['query' => ['q' => $query, 'type' => 'artist']]);
+		$response = $client->get(self::BASE_URL.'search', ['debug' => true, 'query' => ['q' => 'genre:"'.implode(',', $genres) . '"', 'type' => 'artist']]);
 
-		return $response->getBody();
+		$body = $response->getBody();
+		return $body->getContents();
 	}
 }
