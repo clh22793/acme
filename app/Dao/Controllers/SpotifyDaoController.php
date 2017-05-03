@@ -26,7 +26,10 @@ class SpotifyDaoController extends Controller
 
 			if(!empty($item['images'])){
 				$artist->image_url = $item['images'][0]['url'];
-			}
+			}/*else{
+				$artist->image_url = "//placehold.it/600x600";
+			}*/
+
 			$artist->save();
 		}
 

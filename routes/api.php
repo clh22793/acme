@@ -42,6 +42,7 @@ Route::get('/artists', function(Request $request, SpotifyController $artist, Spo
 	// search spotify
 	$query = $request->input('q');
 	$response = json_decode($artist->search_by_artist($query), true);
+	//$response = $artist->search_by_artist($query);
 
 	// store results in db
 	$dao->save_search_results($response);
