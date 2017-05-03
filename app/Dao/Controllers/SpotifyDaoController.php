@@ -23,6 +23,7 @@ class SpotifyDaoController extends Controller
 			$artist->name = substr($item['name'], 0, self::MAX_CHAR_LENGTH);
 			$artist->spotify_id = $item['id'];
 			$artist->popularity = $item['popularity'];
+			$artist->created = time();
 
 			if(!empty($item['images'])){
 				$artist->image_url = $item['images'][0]['url'];
@@ -42,6 +43,7 @@ class SpotifyDaoController extends Controller
 			// insert into genre
 			$genre = new Genre;
 			$genre->name = $value;
+			$genre->created = time();
 			$genre->save();
 		}
 
