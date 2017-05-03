@@ -16,11 +16,15 @@
 
 	<body>
 
+		<style type="text/css">
+			#results p span {font-weight:bold;}
+			.artist-thumb {cursor:pointer;}
+		</style>
+
+
 		<div id="app" class="row">
 			<div class="small-8 small-centered columns">
 				<h1>ACME Music Search</h1>
-
-				{[message]}
 
 				<form>
 					<input type="text" placeholder="enter artist" v-model="txtArtist">
@@ -29,14 +33,15 @@
 
 				<div id="results">
 
+					<h3>{[resultsHeadline]}</h3>
+
 					<div class="row small-up-2 medium-up-3 large-up-3">
-					  <div v-for="item in searchResults" v-on:click="get_similar(item.id)" class="column column-block">
+					  <div v-for="item in searchResults" v-on:click="get_similar(item.id, item.name)" class="column column-block artist-thumb">
 						<img :src="item.images[0].url" class="thumbnail" alt=""><br>
-						<p>Artist: {[item.name]}<br>
-						Popularity: {[item.popularity]}</p>
+						<p><span>Artist:</span> {[item.name]}<br>
+						<span>Popularity:</span> {[item.popularity]}</p>
 					  </div>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -46,17 +51,17 @@
 			var app = new Vue({
 				el: '#app',
 				data: {
-					message: "hello, world",
 					txtArtist:null,
-					searchResults:null
+					searchResults:null,
+					resultsHeadline:null
 				},
 				methods: {
-					get_similar: function(id){
+					get_similar: function(id,name){
 						var that = this;
 
 						$.get("/api/similar_to?spotify_id="+id, function(data){
-							//console.log(data);
 							that.searchResults = data.artists.items;
+							that.resultsHeadline = "Artists similar to "+name;
 
 							for(var i=0; i < that.searchResults.length; i++){
 								if(that.searchResults[i].images.length == 0){
@@ -64,15 +69,14 @@
 								}
 							}
 
-							console.log(that.searchResults);
 						});
 					},
 					search: function(event){
 						var that = this;
 
 						$.get("/api/artists?q="+this.txtArtist, function(data){
-							//console.log(data);
 							that.searchResults = data.artists.items;
+							that.resultsHeadline = "Search results for: "+that.txtArtist;
 
 							for(var i=0; i < that.searchResults.length; i++){
 								if(that.searchResults[i].images.length == 0){
@@ -80,7 +84,6 @@
 								}
 							}
 
-							console.log(that.searchResults);
 						});
 
 					}
