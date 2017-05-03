@@ -30,7 +30,7 @@
 				<div id="results">
 
 					<div class="row small-up-2 medium-up-3 large-up-3">
-					  <div v-for="item in searchResults" class="column column-block">
+					  <div v-for="item in searchResults" v-on:click="get_similar(item.id)" class="column column-block">
 						<img :src="item.images[0].url" class="thumbnail" alt=""><br>
 						<p>Artist: {[item.name]}<br>
 						Popularity: {[item.popularity]}</p>
@@ -51,6 +51,22 @@
 					searchResults:null
 				},
 				methods: {
+					get_similar: function(id){
+						var that = this;
+
+						$.get("/api/similar_to?spotify_id="+id, function(data){
+							//console.log(data);
+							that.searchResults = data.artists.items;
+
+							for(var i=0; i < that.searchResults.length; i++){
+								if(that.searchResults[i].images.length == 0){
+									that.searchResults[i].images = [{url: "//placehold.it/600x600"}];
+								}
+							}
+
+							console.log(that.searchResults);
+						});
+					},
 					search: function(event){
 						var that = this;
 

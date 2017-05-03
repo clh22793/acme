@@ -10,7 +10,7 @@ use App\ArtistsGenres;
 class SpotifyDaoController extends Controller
 {
 	const MAX_GENRE_MATCH = 2;
-
+	const MAX_CHAR_LENGTH = 150;
 
 	private function save_artist($item)
 	{
@@ -20,15 +20,13 @@ class SpotifyDaoController extends Controller
 		if(empty($artist)){
 			// insert artist
 			$artist = new Artist;
-			$artist->name = $item['name'];
+			$artist->name = substr($item['name'], 0, self::MAX_CHAR_LENGTH);
 			$artist->spotify_id = $item['id'];
 			$artist->popularity = $item['popularity'];
 
 			if(!empty($item['images'])){
 				$artist->image_url = $item['images'][0]['url'];
-			}/*else{
-				$artist->image_url = "//placehold.it/600x600";
-			}*/
+			}
 
 			$artist->save();
 		}

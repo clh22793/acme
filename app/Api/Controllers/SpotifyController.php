@@ -41,7 +41,7 @@ class SpotifyController extends Controller
 	{
 		//$client = new Client();
 		$base_url = 'https://api.spotify.com/v1/search';
-		$response = $this->guzzle->get(self::BASE_URL.'search', ['debug' => true, 'query' => ['q' => 'genre:"'.implode(',', $genres) . '"', 'type' => 'artist']]);
+		$response = $this->guzzle->get(self::BASE_URL.'search', ['query' => ['q' => 'genre:"'.implode(',', $genres) . '"', 'type' => 'artist']]);
 
 		$body = $response->getBody();
 		return $body->getContents();
