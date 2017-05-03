@@ -57,6 +57,13 @@
 						$.get("/api/artists?q="+this.txtArtist, function(data){
 							//console.log(data);
 							that.searchResults = data.artists.items;
+
+							for(var i=0; i < that.searchResults.length; i++){
+								if(that.searchResults[i].images.length == 0){
+									that.searchResults[i].images = [{url: "//placehold.it/600x600"}];
+								}
+							}
+
 							console.log(that.searchResults);
 						});
 
