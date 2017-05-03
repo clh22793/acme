@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\ArtistController;
+//use App\Http\Controllers\ArtistController;
+use App\Api\Controllers\SpotifyController;
 use App\Artist;
 use App\Genre;
 use App\ArtistsGenres;
@@ -29,7 +30,7 @@ function insert($table, $query, $params){
 //Route::get('/artists', 'ArtistController@search');
 
 
-Route::get('/similar_to', function(Request $request, ArtistController $artist){
+Route::get('/similar_to', function(Request $request, SpotifyController $artist){
 	$id = $request->input('spotify_id');
 
 	// get genres of this artist (id)
@@ -51,7 +52,7 @@ Route::get('/similar_to', function(Request $request, ArtistController $artist){
 
 });
 
-Route::get('/artists', function(Request $request, ArtistController $artist){
+Route::get('/artists', function(Request $request, SpotifyController $artist){
 	$query = $request->input('q');
 	$response = json_decode($artist->search_by_artist($query), true);
 

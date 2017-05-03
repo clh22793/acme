@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Api\Controllers;
 
 use Illuminate\Http\Request;
 
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 
-class ArtistController extends Controller
+class SpotifyController extends Controller
 {
 
 	const BASE_URL = "https://api.spotify.com/v1/";
