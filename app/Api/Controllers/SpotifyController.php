@@ -3,7 +3,6 @@
 namespace App\Api\Controllers;
 
 use Illuminate\Http\Request;
-
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 
@@ -12,10 +11,14 @@ class SpotifyController extends Controller
 
 	const BASE_URL = "https://api.spotify.com/v1/";
 
+	public function __construct(){
+		$this->guzzle = new Client();
+	}
+
 	public function search_by_artist($query)
 	{
-		$client = new Client();
-		$response = $client->get(self::BASE_URL.'search', ['query' => ['q' => $query, 'type' => 'artist']]);
+		//$client = new Client();
+		$response = $this->guzzle->get(self::BASE_URL.'search', ['query' => ['q' => $query, 'type' => 'artist']]);
 
 		$body = $response->getBody();
 		return $body->getContents();
@@ -23,9 +26,9 @@ class SpotifyController extends Controller
 
 	public function search_by_genres(array $genres)
 	{
-		$client = new Client();
+		//$client = new Client();
 		$base_url = 'https://api.spotify.com/v1/search';
-		$response = $client->get(self::BASE_URL.'search', ['debug' => true, 'query' => ['q' => 'genre:"'.implode(',', $genres) . '"', 'type' => 'artist']]);
+		$response = $this->guzzle->get(self::BASE_URL.'search', ['debug' => true, 'query' => ['q' => 'genre:"'.implode(',', $genres) . '"', 'type' => 'artist']]);
 
 		$body = $response->getBody();
 		return $body->getContents();
